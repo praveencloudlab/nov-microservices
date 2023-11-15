@@ -1,0 +1,57 @@
+Spring boot and Microservices
+====================================
+
+1.Java 17
+2.Web application basics
+3.Hibernate/jpa as well database basics
+
+
+TOC
+----
+spring core basics
+	-> Core
+	-> Database
+	-> Web and rest services
+
+ Microservices
+ 	-> patterns
+ 	-> communications of services
+ 		-> intercommnications
+ 		-> Rabbit MQ and Apache Kafka
+
+ 	-> Globalizing the configuration
+ 	-> Netflix cloud basics
+ 		-> Config Server and client
+ 		-> Feign
+ 		-> Eureka Service
+ 		-> Routings and load balance
+ 		-> Fallback operations
+
+
+   
+   Lab / Software
+   ==================
+   1.JDK 17 and above
+   2.MySQL8 databse
+   3.Rabbit MQ and Apache Kafka
+   4.Postman
+   5.Eclipse IDE or IntelliJ Idea
+
+
+   Objectives of Traning
+   ==========================
+   -> Write spring boot Monolithic applications  
+   -> Create and implement microservices
+   -> Creare spring cloud applications
+
+
+
+
+
+
+
+
+
+
+
+
