@@ -1,6 +1,7 @@
 package com.cts.ecart;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +9,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import com.cts.ecart.entity.Brand;
 import com.cts.ecart.entity.Category;
+import com.cts.ecart.entity.Product;
 import com.cts.ecart.entity.User;
 import com.cts.ecart.repository.BrandRepository;
 import com.cts.ecart.repository.CategoryRepository;
@@ -29,7 +31,7 @@ public class Application {
 		//prodRepo.findAll().forEach(System.out::println);
 		// catRepo.findAll().forEach(System.out::println);
 		
-		brandRepo.findAll().forEach(System.out::println);
+		//brandRepo.findAll().forEach(System.out::println);
 		
 		/*
 		 Category catObj = catRepo.findById(82).orElse(null);
@@ -39,6 +41,14 @@ public class Application {
 			 System.out.println(b.getBrandTitle());
 		 }
 		 */
+		
+		//List<Product> prods = prodRepo.findByProductTitle("Iphone 14 Pro");
+		List<Product> prods = prodRepo.findByProductTitleLike("%Laptop%");
+
+		prods.forEach(System.out::println);
+		
+		
+		
 		
 		
 		

@@ -1,0 +1,9 @@
+Spring boot web
+====================
+-> web mvc
+		-> focus more on views like Thymeleaf,JSP
+-> restful web services
+		-> response content type like JSON, XML
+
+
+ 
