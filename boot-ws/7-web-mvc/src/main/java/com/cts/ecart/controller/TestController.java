@@ -3,6 +3,7 @@ package com.cts.ecart.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class TestController {
@@ -16,6 +17,12 @@ public class TestController {
 		System.out.println(">>> Server logged message:: testMethod");
 		
 		return "hello";
+	}
+	
+	@RequestMapping("/s2")
+	@ResponseBody
+	public String f2() {
+		return "Good Morning!";
 	}
 
 }
