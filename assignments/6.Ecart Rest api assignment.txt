@@ -1,0 +1,21 @@
+Ecart Rest api assignment
+=============================
+1.Find all products 
+2.Find/filter all products whose price is in the givn range(min,max)
+3.Display all categories only
+4.Display all categories with Brand names
+5.Display all categories with Brand, and displayed brands products
+6.add a product to the cart for a specified user
+7.display cart items of a specified user
+ex: http://localhost:8080/products/cart/praveen
+
+
+
+
+
+
+
+
+
+
+
