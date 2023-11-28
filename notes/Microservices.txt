@@ -1,0 +1,178 @@
+Microservices
+===================
+1.microservice commuinications
+2.globalising the configuration
+3.config server and client
+4.cloud bus
+5.feign service
+6.eruka service discovery
+7.load balencing
+8.routers
+9.fallback operations
+
+
+1.Microservice commuinications
+-----------------------------------
+->RestTemplate
+->Webclient
+->RabbitMQ
+->Apache Kafka
+
+RestTemplate
+---------------
+RestTemplate is a synchronous client to perform HTTP requests, exposing a simple, template method API over underlying HTTP client libraries. It's part of the Spring Framework and has been the standard way to perform client-side HTTP operations in Spring applications until the introduction of the non-blocking, reactive WebClient in Spring 5.
+
+Key Features of RestTemplate:
+Synchronous Operations: RestTemplate operates synchronously, meaning it blocks the thread until the response is received. This is a significant difference compared to the reactive WebClient.
+
+Simple API for HTTP Requests: It provides a straightforward and easy-to-use API for making HTTP GET, POST, PUT, DELETE, and other requests.
+
+Built-in Error Handling: RestTemplate provides methods to handle HTTP errors.
+
+Marshalling and Unmarshalling: It can automatically marshal and unmarshal data formats (like JSON, XML) to and from Java objects using HttpMessageConverters.
+
+Interceptors: You can add interceptors to manipulate requests and responses, such as for logging or authentication purposes.
+
+Integration with Spring Ecosystem: Like WebClient, RestTemplate integrates well with other parts of the Spring ecosystem.
+Ex:
+import org.springframework.web.client.RestTemplate;
+
+public class RestTemplateExample {
+    private final RestTemplate restTemplate;
+
+    public RestTemplateExample() {
+        this.restTemplate = new RestTemplate();
+    }
+
+    public String getForObjectExample() {
+        return restTemplate.getForObject("http://example.com/api/resource", String.class);
+    }
+}
+
+
+
+
+
+Webclient
+---------------
+WebClient is a part of the Spring Framework, specifically within the Spring WebFlux module, which is used for building reactive, non-blocking web applications. It was introduced in Spring 5 as an alternative to the traditional RestTemplate for HTTP requests, and it's designed to work with the reactive programming model.
+
+Key Features of WebClient:
+Non-Blocking and Asynchronous: WebClient supports non-blocking I/O operations, making it suitable for scenarios where you need to handle a large number of concurrent requests without tying up server threads.
+
+Reactive API: It uses Project Reactor's Mono and Flux types for working with single or multiple asynchronous data streams, respectively.
+
+Flexible Request Handling: WebClient provides a fluent API for building and executing HTTP requests, allowing fine-grained control over request parameters, headers, body, and more.
+
+Support for Different Data Formats: It can handle various data formats, such as JSON, XML, or even custom formats, both for sending (as part of the request) and receiving (in the response).
+
+Error Handling: It offers robust error handling mechanisms, including the ability to handle client and server errors reactively.
+
+Integration with Spring Ecosystem: WebClient integrates seamlessly with other parts of the Spring ecosystem, like Spring Security for authentication and authorization, and Spring Boot for auto-configuration.
+
+Ex: 
+import org.springframework.web.reactive.function.client.WebClient;
+
+public class WebClientExample {
+    private final WebClient webClient;
+
+    public WebClientExample() {
+        this.webClient = WebClient.create("http://example.com");
+    }
+
+    public void performRequest() {
+        webClient.get()
+                 .uri("/api/resource")
+                 .retrieve()
+                 .bodyToMono(String.class)
+                 .subscribe(System.out::println);
+    }
+}
+
+When to Use WebClient:
+------------------------
+Asynchronous Processing: When you have I/O heavy operations and you want to prevent thread blocking.
+Reactive Applications: If you are building a fully reactive application, especially with Spring WebFlux.
+High Concurrency: For handling a large number of simultaneous connections efficiently.
+Microservices: In microservice architectures where services often communicate over HTTP.
+WebClient is a powerful tool for modern web application development, particularly useful in scenarios that demand scalability, resilience, and responsiveness.
+
+
+Other ways
+--------------
+public Mono<String> getMessage(){
+	    Mono<String> message = webClient.get()
+	    .uri("/api/service1")
+	    .retrieve()
+	    .bodyToMono(String.class);
+	    return message;
+	  }
+WebClient Usage: The webClient.get() call initiates a GET request using Spring's WebClient, which is a modern, non-blocking, reactive client for making HTTP requests in Spring applications.
+
+URI Specification: .uri("/api/service1") sets the URI of the request to /api/service1. This means the request will be sent to this endpoint.
+
+Response Retrieval: .retrieve() is used to fetch the response from the specified URI.
+
+Response Body Processing: .bodyToMono(String.class) converts the body of the response to a Mono that emits a String. This is a way of saying that the method expects the response body to be a String, and it will be processed asynchronously.
+
+Return: The method then returns the Mono<String> which will eventually contain the response from the call to /api/service1.
+
+This method is an example of a non-blocking, asynchronous operation in a Spring WebFlux application. It's designed to handle requests and responses in a way that doesn't block the executing thread, which is useful for high-concurrency web applications.
+
+displayig response
+----------------------
+To display the message retrieved by the getMessage method you provided, which returns a Mono<String>, you need to subscribe to the Mono. This is because, in reactive programming, data flows are not activated until you subscribe to them. There are multiple ways to handle and display the message, depending on the context of your application:
+
+1.Subscribing Directly in the Code
+You can directly subscribe to the Mono and define actions to perform when the data is available or in case of an error:
+getMessage()
+    .subscribe(
+        message -> {
+            // Handle the successful retrieval of the message
+            System.out.println("Received message: " + message);
+        },
+        error -> {
+            // Handle any errors that occur during the retrieval
+            error.printStackTrace();
+        }
+    );
+
+2. Using block Method
+In a non-reactive part of your application where you need the data immediately and can afford to block, you can use the block method. However, it's important to note that this goes against the principles of reactive programming and should be used cautiously:
+String message = getMessage().block();
+System.out.println("Received message: " + message);
+
+3. In a Web Context with Spring WebFlux
+If you are using Spring WebFlux for a web application, you can return the Mono<String> directly from a controller method, and Spring will handle the subscription and data rendering:
+@GetMapping("/displayMessage")
+public Mono<String> displayMessage() {
+    return getMessage();
+}
+
+4. Using doOnNext for Side-Effects
+If you want to perform some side-effect (like logging) when the message is received but continue passing the Mono along a reactive chain, you can use doOnNext:
+
+getMessage()
+    .doOnNext(message -> System.out.println("Received message: " + message))
+    // Continue with further processing of the Mono
+
+
+Important Considerations:
+-----------------------------
+Reactive Context: Ensure that the rest of your application is compatible with reactive programming principles. Mixing blocking and non-blocking code can lead to performance issues and deadlocks.
+Error Handling: Always include error handling when working with reactive streams. Errors in reactive chains can be handled with methods like onErrorReturn, onErrorResume, etc.
+Thread Blocking: Avoid blocking threads in reactive programming. If you absolutely must block, be aware of the context and the impact on performance and responsiveness.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
