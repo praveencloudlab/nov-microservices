@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/test1")
+@RequestMapping("/api/test2")
 @RefreshScope
 public class TestRestResource {
 	
-	@Value("${name}")
-	private String personName;
+	@Value("${store.location}")
+	private String storeLocation;
 	
 	@GetMapping
 	public String getName() {
-		return "Person Name is "+personName;
+		return "Connected store is "+storeLocation;
 	}
 
 }

@@ -16,7 +16,7 @@ public class TestRestResource {
 	
 	@GetMapping
 	public String getName() {
-		return "Person Name is "+personName;
+		return personName;
 	}
 
 }
